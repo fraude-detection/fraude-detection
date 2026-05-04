@@ -40,12 +40,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
   }, []);
 
-  // 3. Función Login conectada a IntelliJ (Puerto 8080)
+  // 3. Función Login conectada al backend
+  const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
   const login = async (numDocumento: string, password: string): Promise<boolean> => {
     try {
       console.log("📡 Intentando login con:", { numDocumento, password });
       
-      const response = await fetch("http://localhost:8080/api/usuarios/login", {
+      const response = await fetch(`${API_BASE}/api/usuarios/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

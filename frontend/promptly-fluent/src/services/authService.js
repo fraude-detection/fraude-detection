@@ -1,5 +1,5 @@
 // src/services/authService.js
-const API_URL = "http://localhost:8080/api/usuarios";
+const API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:8080"}/api/usuarios`;
 
 export const login = async (numDocumento, password) => {
   try {

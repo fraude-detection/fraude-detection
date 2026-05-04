@@ -55,8 +55,9 @@ const Dashboard = () => {
         );
 
         // Fetch transacciones
+        const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
         const transResponse = await fetch(
-          `http://localhost:8080/api/transacciones/cuenta/${user.numeroCuenta}`,
+          `${API_BASE}/api/transacciones/cuenta/${user.numeroCuenta}`,
         );
 
         console.log("📡 Respuesta transacciones:", transResponse.status);
