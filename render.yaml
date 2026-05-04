@@ -1,6 +1,7 @@
 services:
   - type: web
     name: fraude-detection-backend
+    runtime: docker
     dockerfilePath: ./Dockerfile
     envVars:
       - key: SPRING_DATASOURCE_URL
