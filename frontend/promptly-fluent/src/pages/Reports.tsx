@@ -28,7 +28,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
-const BASE = "http://localhost:8080";
+const BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 interface Resumen {
   totalTransacciones: number;

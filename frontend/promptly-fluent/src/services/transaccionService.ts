@@ -1,7 +1,8 @@
 // src/services/transaccionService.ts
 
-const API_URL = "http://localhost:8080/api/transacciones";
-const CATALOG_URL = "http://localhost:8080/api/catalogos";
+const BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_URL = `${BASE}/api/transacciones`;
+const CATALOG_URL = `${BASE}/api/catalogos`;
 
 export interface TipoTransaccion {
   id: number;
