@@ -21,6 +21,7 @@ interface AuthContextType {
   user: User | null;
   login: (numDocumento: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateUser: (updates: Partial<User>) => void;
   isAuthenticated: boolean;
   loading: boolean;
 }
@@ -41,10 +42,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // 3. Función Login conectada a IntelliJ (Puerto 8080)
-  const login = async (numDocumento: string, password: string): Promise<boolean> => {
+  const login = async (
+    numDocumento: string,
+    password: string,
+  ): Promise<boolean> => {
     try {
       console.log("📡 Intentando login con:", { numDocumento, password });
-      
+
       const response = await fetch("http://localhost:8080/api/usuarios/login", {
         method: "POST",
         headers: {
@@ -56,8 +60,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }),
       });
 
-      console.log("📡 Respuesta del servidor:", response.status, response.statusText);
-      
+      console.log(
+        "📡 Respuesta del servidor:",
+        response.status,
+        response.statusText,
+      );
+
       const data = await response.json();
       console.log("📡 Datos recibidos:", data);
 
@@ -74,7 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         };
 
         console.log("✅ Login exitoso. Usuario:", user);
-        
+
         // Guardamos en el estado y en el almacenamiento local
         setUser(user);
         localStorage.setItem("user_session", JSON.stringify(user));
@@ -94,9 +102,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("user_session");
   };
 
+  const updateUser = (updates: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, ...updates };
+      localStorage.setItem("user_session", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isAuthenticated: !!user, loading }}
+      value={{
+        user,
+        login,
+        logout,
+        updateUser,
+        isAuthenticated: !!user,
+        loading,
+      }}
     >
       {!loading && children}
     </AuthContext.Provider>

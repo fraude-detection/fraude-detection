@@ -33,6 +33,8 @@ export interface TransaccionResponse extends Transaccion {
   estadoId: number;
   estadoNombre: string;
   estado?: string;
+  codigoRetiro?: string;
+  fechaExpiracionCodigo?: string;
 }
 
 export const obtenerTiposTransaccion = async (): Promise<TipoTransaccion[]> => {
@@ -152,3 +154,93 @@ export const actualizarEstadoTransaccion = async (
   return response.json();
 };
 
+export const realizarDeposito = async (
+  numeroCuenta: string,
+  monto: number,
+): Promise<TransaccionResponse> => {
+  const response = await fetch(`${API_URL}/deposito`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ numeroCuenta, monto }),
+  });
+  if (!response.ok) {
+    await parseError(response, "Error al procesar el depósito");
+  }
+  return response.json();
+};
+
+export const realizarRetiro = async (
+  numeroCuenta: string,
+  monto: number,
+): Promise<TransaccionResponse> => {
+  const response = await fetch(`${API_URL}/retiro`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ numeroCuenta, monto }),
+  });
+  if (!response.ok) {
+    await parseError(response, "Error al procesar el retiro");
+  }
+  return response.json();
+};
+
+export const usarCodigoRetiro = async (
+  codigo: string,
+): Promise<TransaccionResponse> => {
+  const response = await fetch(`${API_URL}/retiro/usar-codigo`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ codigo }),
+  });
+  if (!response.ok) {
+    await parseError(response, "Error al usar el código de retiro");
+  }
+  return response.json();
+};
+
+export const solicitarPrestamo = async (
+  cuentaOrigen: string,
+  cuentaDestino: string,
+  monto: number,
+): Promise<TransaccionResponse> => {
+  const response = await fetch(`${API_URL}/prestamo`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cuentaOrigen, cuentaDestino, monto }),
+  });
+  if (!response.ok) {
+    await parseError(response, "Error al solicitar el préstamo");
+  }
+  return response.json();
+};
+
+export const obtenerPrestamosPendientesDePrestamista = async (
+  numeroCuenta: string,
+): Promise<TransaccionResponse[]> => {
+  const response = await fetch(
+    `${API_URL}/prestamos-pendientes/${numeroCuenta}`,
+  );
+  if (!response.ok) {
+    await parseError(response, "Error al obtener préstamos pendientes");
+  }
+  return response.json();
+};
+
+export const responderPrestamo = async (
+  id: number,
+  numeroCuenta: string,
+  estado: "APROBADA" | "RECHAZADA",
+): Promise<TransaccionResponse> => {
+  const response = await fetch(`${API_URL}/prestamo/${id}/responder`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Numero-Cuenta": numeroCuenta,
+    },
+    body: JSON.stringify({ estado }),
+  });
+  if (!response.ok) {
+    await parseError(response, "Error al responder el préstamo");
+  }
+  return response.json();
+};

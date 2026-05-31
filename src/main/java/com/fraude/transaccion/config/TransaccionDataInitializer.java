@@ -40,7 +40,8 @@ public class TransaccionDataInitializer implements ApplicationRunner {
                 new Object[] { "DEPOSITO", "Ingreso de dinero a una cuenta" },
                 new Object[] { "RETIRO", "Extracción de dinero de una cuenta" },
                 new Object[] { "PAGO", "Pago de servicios o facturas" },
-                new Object[] { "COMPRA", "Compra de bienes o servicios" });
+                new Object[] { "COMPRA", "Compra de bienes o servicios" },
+                new Object[] { "PRESTAMO", "Solicitud de préstamo entre cuentas" });
 
         for (Object[] tipo : tipos) {
             String nombre = (String) tipo[0];

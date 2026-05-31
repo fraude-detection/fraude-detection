@@ -163,6 +163,144 @@ public class TransaccionController {
         }
     }
 
+    @PostMapping("/deposito")
+    public ResponseEntity<?> realizarDeposito(@RequestBody Map<String, Object> body) {
+        try {
+            String numeroCuenta = (String) body.get("numeroCuenta");
+            Double monto = ((Number) body.get("monto")).doubleValue();
+            log.info("Solicitud de depósito: cuenta={}, monto={}", numeroCuenta, monto);
+            Transaccion resultado = service.realizarDeposito(numeroCuenta, monto);
+            log.info("Depósito procesado: id={}, estado={}", resultado.getId(), resultado.getEstadoNombre());
+            return ResponseEntity.ok(resultado);
+        } catch (IllegalArgumentException e) {
+            log.warn("Depósito rechazado: {}", e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            log.error("Error al procesar depósito: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al procesar el depósito");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PostMapping("/retiro")
+    public ResponseEntity<?> realizarRetiro(@RequestBody Map<String, Object> body) {
+        try {
+            String numeroCuenta = (String) body.get("numeroCuenta");
+            Double monto = ((Number) body.get("monto")).doubleValue();
+            log.info("Solicitud de retiro: cuenta={}, monto={}", numeroCuenta, monto);
+            Transaccion resultado = service.realizarRetiro(numeroCuenta, monto);
+            log.info("Retiro procesado: id={}, estado={}", resultado.getId(), resultado.getEstadoNombre());
+            return ResponseEntity.ok(resultado);
+        } catch (IllegalArgumentException e) {
+            log.warn("Retiro rechazado: {}", e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            log.error("Error al procesar retiro: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al procesar el retiro");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PostMapping("/retiro/usar-codigo")
+    public ResponseEntity<?> usarCodigoRetiro(@RequestBody Map<String, Object> body) {
+        try {
+            String codigo = (String) body.get("codigo");
+            if (codigo == null || codigo.isBlank()) {
+                throw new IllegalArgumentException("El código es requerido");
+            }
+            log.info("Uso de código de retiro en cajero: codigo={}", codigo);
+            Transaccion resultado = service.usarCodigoRetiro(codigo);
+            log.info("Retiro en cajero completado: id={}, cuenta={}", resultado.getId(), resultado.getCuentaOrigenId());
+            return ResponseEntity.ok(resultado);
+        } catch (IllegalArgumentException e) {
+            log.warn("Código de retiro inválido: {}", e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            log.error("Error al usar código de retiro: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al procesar el retiro en cajero");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PostMapping("/prestamo")
+    public ResponseEntity<?> solicitarPrestamo(@RequestBody Map<String, Object> body) {
+        try {
+            String cuentaOrigen = (String) body.get("cuentaOrigen");
+            String cuentaDestino = (String) body.get("cuentaDestino");
+            Double monto = ((Number) body.get("monto")).doubleValue();
+            log.info("Solicitud de préstamo: de={}, a={}, monto={}", cuentaOrigen, cuentaDestino, monto);
+            Transaccion resultado = service.solicitarPrestamo(cuentaOrigen, cuentaDestino, monto);
+            log.info("Préstamo solicitado: id={}, estado={}", resultado.getId(), resultado.getEstadoNombre());
+            return ResponseEntity.ok(resultado);
+        } catch (IllegalArgumentException e) {
+            log.warn("Solicitud de préstamo rechazada: {}", e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            log.error("Error al solicitar préstamo: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al procesar la solicitud de préstamo");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @GetMapping("/prestamos-pendientes/{numeroCuenta}")
+    public ResponseEntity<?> obtenerPrestamosPendientes(@PathVariable String numeroCuenta) {
+        try {
+            List<Transaccion> pendientes = service.obtenerPrestamosPendientesDePrestamista(numeroCuenta);
+            return ResponseEntity.ok(pendientes);
+        } catch (Exception e) {
+            log.error("Error al obtener préstamos pendientes: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al obtener préstamos pendientes");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PutMapping("/prestamo/{id}/responder")
+    public ResponseEntity<?> responderPrestamo(
+            @PathVariable Integer id,
+            @RequestHeader("X-Numero-Cuenta") String numeroCuenta,
+            @RequestBody Map<String, Object> body) {
+        try {
+            String estado = (String) body.get("estado");
+            log.info("Respuesta a préstamo: id={}, prestamista={}, estado={}", id, numeroCuenta, estado);
+            Transaccion resultado = service.responderPrestamo(id, numeroCuenta, estado);
+            return ResponseEntity.ok(resultado);
+        } catch (IllegalArgumentException e) {
+            log.warn("Error al responder préstamo: {}", e.getMessage());
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        } catch (Exception e) {
+            log.error("Error al responder préstamo: {}", e.getMessage(), e);
+            Map<String, Object> error = new HashMap<>();
+            error.put("success", false);
+            error.put("message", "Error al procesar la respuesta");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
     private ResponseEntity<Map<String, Object>> validarAdmin(String adminDocumento) {
         if (adminDocumento == null || adminDocumento.isBlank()) {
             return construirError(HttpStatus.BAD_REQUEST, "Header X-Admin-Documento es requerido");

@@ -1,6 +1,7 @@
 package com.fraude.transaccion.repository;
 
 import java.util.List;
+import java.util.Optional;
 import com.fraude.transaccion.model.Transaccion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,9 @@ public interface TransaccionRepository extends JpaRepository<Transaccion, Intege
     // Historial de una cuenta específica (enviadas + recibidas)
     @Query("SELECT t FROM Transaccion t WHERE t.cuentaOrigenId = :cuenta OR t.cuentaDestinoId = :cuenta ORDER BY t.fechaCreacion DESC")
     List<Transaccion> findByCuenta(@Param("cuenta") String cuenta);
+
+    Optional<Transaccion> findByCodigoRetiro(String codigoRetiro);
+
+    @Query("SELECT t FROM Transaccion t WHERE t.cuentaOrigenId = :cuenta AND t.tipoTransaccion.nombre = 'PRESTAMO' AND t.estadoTransaccion.nombre = 'PENDIENTE' ORDER BY t.fechaCreacion DESC")
+    List<Transaccion> findPrestamosPendientesPorPrestamista(@Param("cuenta") String cuenta);
 }

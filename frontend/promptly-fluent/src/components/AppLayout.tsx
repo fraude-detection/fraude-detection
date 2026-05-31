@@ -11,6 +11,9 @@ import {
   BarChart2,
   CreditCard,
   FileText,
+  Wallet,
+  PiggyBank,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isAdminRole } from "@/lib/roles";
@@ -19,10 +22,13 @@ import { useState, useEffect } from "react";
 const navItems = [
   { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { label: "Transferir", path: "/transfer", icon: ArrowLeftRight },
+  { label: "Retiro / Préstamo", path: "/deposito-retiro", icon: Wallet },
+  { label: "Bolsillos", path: "/bolsillos", icon: PiggyBank },
   { label: "Historial", path: "/history", icon: History },
   { label: "Reportes", path: "/reports", icon: BarChart2 },
   { label: "Mis Tarjetas", path: "/tarjetas", icon: CreditCard },
   { label: "Facturas", path: "/facturas", icon: FileText },
+  { label: "Mi Perfil", path: "/perfil", icon: UserCircle },
 ];
 
 const adminItems = [

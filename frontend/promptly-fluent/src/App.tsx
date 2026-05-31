@@ -14,6 +14,9 @@ import AdminPage from "./pages/Admin";
 import ReportsPage from "./pages/Reports";
 import TarjetasPage from "./pages/Tarjetas";
 import FacturasPage from "./pages/Facturas";
+import DepositoRetiroPage from "./pages/DepositoRetiro";
+import BolsillosPage from "./pages/Bolsillos";
+import PerfilPage from "./pages/Perfil";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./hooks/useAuth";
 import { isAdminRole } from "./lib/roles";
@@ -51,6 +54,9 @@ const App = () => (
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/tarjetas" element={<TarjetasPage />} />
               <Route path="/facturas" element={<FacturasPage />} />
+              <Route path="/deposito-retiro" element={<DepositoRetiroPage />} />
+              <Route path="/bolsillos" element={<BolsillosPage />} />
+              <Route path="/perfil" element={<PerfilPage />} />
               <Route path="/admin" element={<AdminRoute />} />
             </Route>
             <Route path="*" element={<NotFound />} />

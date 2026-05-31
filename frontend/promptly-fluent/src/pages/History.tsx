@@ -14,11 +14,15 @@ import {
   TransaccionResponse,
 } from "@/services/transaccionService";
 import { toast } from "sonner";
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+
+type SortDir = "desc" | "asc";
 
 const HistoryPage = () => {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState<TransaccionResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   useEffect(() => {
     const cargarHistorial = async () => {
@@ -40,6 +44,12 @@ const HistoryPage = () => {
 
   if (!user) return null;
 
+  const sorted = [...transactions].sort((a, b) => {
+    const ta = a.fechaCreacion ? new Date(a.fechaCreacion).getTime() : 0;
+    const tb = b.fechaCreacion ? new Date(b.fechaCreacion).getTime() : 0;
+    return sortDir === "desc" ? tb - ta : ta - tb;
+  });
+
   const mapearEstado = (
     estadoNombre?: string,
   ): "approved" | "rejected" | "pending" => {
@@ -58,7 +68,6 @@ const HistoryPage = () => {
           {transactions.length} transacciones encontradas
         </p>
       </div>
-
       <div className="bg-card rounded-2xl shadow-card overflow-hidden">
         {loading ? (
           <div className="p-8 text-center text-muted-foreground">
@@ -72,8 +81,20 @@ const HistoryPage = () => {
           <Table>
             <TableHeader>
               <TableRow className="border-border hover:bg-transparent">
-                <TableHead className="text-muted-foreground font-semibold text-xs uppercase tracking-wider">
-                  Fecha
+                <TableHead
+                  className="text-muted-foreground font-semibold text-xs uppercase tracking-wider cursor-pointer select-none hover:text-foreground transition-colors"
+                  onClick={() =>
+                    setSortDir((d) => (d === "desc" ? "asc" : "desc"))
+                  }
+                >
+                  <span className="flex items-center gap-1">
+                    Fecha
+                    {sortDir === "desc" ? (
+                      <ArrowDown className="w-3 h-3" />
+                    ) : (
+                      <ArrowUp className="w-3 h-3" />
+                    )}
+                  </span>
                 </TableHead>
                 <TableHead className="text-muted-foreground font-semibold text-xs uppercase tracking-wider">
                   De / Para
@@ -90,7 +111,7 @@ const HistoryPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {transactions.map((txn) => (
+              {sorted.map((txn) => (
                 <TableRow key={txn.id} className="border-border">
                   <TableCell className="text-sm text-foreground">
                     {txn.fechaCreacion

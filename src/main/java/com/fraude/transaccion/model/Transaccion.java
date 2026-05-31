@@ -51,6 +51,14 @@ public class Transaccion {
     @Column(name = "fecha")
     private LocalDateTime fechaCreacion;
 
+    /** Código numérico de 6 dígitos para retiro en cajero */
+    @Column(name = "codigo_retiro", length = 10)
+    private String codigoRetiro;
+
+    /** Fecha/hora en que expira el código de retiro */
+    @Column(name = "fecha_expiracion_codigo")
+    private LocalDateTime fechaExpiracionCodigo;
+
     /** Retrocompatibilidad: expone el nombre del tipo como string en el JSON */
     @JsonProperty("tipoTransaccionNombre")
     public String getTipoTransaccionNombre() {

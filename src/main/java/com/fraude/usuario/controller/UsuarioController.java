@@ -3,6 +3,7 @@ package com.fraude.usuario.controller;
 import com.fraude.usuario.dto.LoginRequest;
 import com.fraude.usuario.dto.LoginResponse;
 import com.fraude.usuario.dto.RegisterRequest;
+import com.fraude.usuario.dto.UpdateUserRequest;
 import com.fraude.usuario.model.Usuario;
 import com.fraude.usuario.service.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,16 @@ public class UsuarioController {
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
         LoginResponse response = service.register(request);
+        if (!response.isSuccess()) {
+            return ResponseEntity.badRequest().body(response);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{numDocumento}")
+    public ResponseEntity<LoginResponse> actualizar(@PathVariable String numDocumento,
+            @RequestBody UpdateUserRequest request) {
+        LoginResponse response = service.actualizarUsuario(numDocumento, request);
         if (!response.isSuccess()) {
             return ResponseEntity.badRequest().body(response);
         }
