@@ -17,6 +17,7 @@ import FacturasPage from "./pages/Facturas";
 import DepositoRetiroPage from "./pages/DepositoRetiro";
 import BolsillosPage from "./pages/Bolsillos";
 import PerfilPage from "./pages/Perfil";
+import ClaveDinamicaPage from "./pages/ClaveDinamica";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./hooks/useAuth";
 import { isAdminRole } from "./lib/roles";
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/deposito-retiro" element={<DepositoRetiroPage />} />
               <Route path="/bolsillos" element={<BolsillosPage />} />
               <Route path="/perfil" element={<PerfilPage />} />
+              <Route path="/clave-dinamica" element={<ClaveDinamicaPage />} />
               <Route path="/admin" element={<AdminRoute />} />
             </Route>
             <Route path="*" element={<NotFound />} />

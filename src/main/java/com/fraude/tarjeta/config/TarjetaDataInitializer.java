@@ -87,10 +87,10 @@ public class TarjetaDataInitializer implements ApplicationRunner {
         }
         int migrated = entityManager.createNativeQuery("""
                 UPDATE tbl_tarjeta
-                SET marca_id = (
-                    SELECT id FROM tbl_marca_tarjeta WHERE nombre = tbl_tarjeta.marca
+                SET id_marca_tarjeta = (
+                    SELECT id_marca_tarjeta FROM tbl_marca_tarjeta WHERE nombre_marca_tarjeta = tbl_tarjeta.marca
                 )
-                WHERE marca_id IS NULL
+                WHERE id_marca_tarjeta IS NULL
                   AND marca IS NOT NULL
                 """).executeUpdate();
 
@@ -106,18 +106,21 @@ public class TarjetaDataInitializer implements ApplicationRunner {
      * Solo se ejecuta cuando hay filas cuyo estado_id no es un FK válido.
      */
     private void migrarEstadosTarjeta() {
-        int migrated = entityManager.createNativeQuery("""
-                UPDATE tbl_tarjeta
-                SET estado_id = CASE estado_id
-                    WHEN 1 THEN (SELECT id FROM tbl_estado_tarjeta WHERE nombre = 'ACTIVA')
-                    WHEN 2 THEN (SELECT id FROM tbl_estado_tarjeta WHERE nombre = 'PENDIENTE')
-                    WHEN 3 THEN (SELECT id FROM tbl_estado_tarjeta WHERE nombre = 'ELIMINADA')
-                    WHEN 4 THEN (SELECT id FROM tbl_estado_tarjeta WHERE nombre = 'RECHAZADA')
-                    ELSE estado_id
-                END
-                WHERE estado_id NOT IN (SELECT id FROM tbl_estado_tarjeta)
-                  AND estado_id IS NOT NULL
-                """).executeUpdate();
+        int migrated = entityManager
+                .createNativeQuery(
+                        """
+                                UPDATE tbl_tarjeta
+                                SET id_estado_tarjeta = CASE id_estado_tarjeta
+                                    WHEN 1 THEN (SELECT id_estado_tarjeta FROM tbl_estado_tarjeta WHERE nombre_estado_tarjeta = 'ACTIVA')
+                                    WHEN 2 THEN (SELECT id_estado_tarjeta FROM tbl_estado_tarjeta WHERE nombre_estado_tarjeta = 'PENDIENTE')
+                                    WHEN 3 THEN (SELECT id_estado_tarjeta FROM tbl_estado_tarjeta WHERE nombre_estado_tarjeta = 'ELIMINADA')
+                                    WHEN 4 THEN (SELECT id_estado_tarjeta FROM tbl_estado_tarjeta WHERE nombre_estado_tarjeta = 'RECHAZADA')
+                                    ELSE id_estado_tarjeta
+                                END
+                                WHERE id_estado_tarjeta NOT IN (SELECT id_estado_tarjeta FROM tbl_estado_tarjeta)
+                                  AND id_estado_tarjeta IS NOT NULL
+                                """)
+                .executeUpdate();
 
         if (migrated > 0) {
             log.info("Migración estado tarjeta: {} filas actualizadas", migrated);

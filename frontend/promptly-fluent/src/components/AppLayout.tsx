@@ -14,6 +14,7 @@ import {
   Wallet,
   PiggyBank,
   UserCircle,
+  KeyRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isAdminRole } from "@/lib/roles";
@@ -29,6 +30,7 @@ const navItems = [
   { label: "Mis Tarjetas", path: "/tarjetas", icon: CreditCard },
   { label: "Facturas", path: "/facturas", icon: FileText },
   { label: "Mi Perfil", path: "/perfil", icon: UserCircle },
+  { label: "Clave Dinámica", path: "/clave-dinamica", icon: KeyRound },
 ];
 
 const adminItems = [

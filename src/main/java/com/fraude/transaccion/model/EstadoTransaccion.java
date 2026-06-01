@@ -13,11 +13,12 @@ public class EstadoTransaccion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_estado_transaccion")
     private Integer id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "nombre_estado_transaccion", nullable = false, unique = true, length = 50)
     private String nombre;
 
-    @Column(length = 200)
+    @Column(name = "descripcion_estado_transaccion", length = 200)
     private String descripcion;
 }

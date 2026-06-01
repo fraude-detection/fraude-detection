@@ -82,10 +82,10 @@ public class TransaccionDataInitializer implements ApplicationRunner {
         // Asigna TRANSFERENCIA a todas las transacciones que no tengan tipo asignado
         entityManager.createNativeQuery("""
                 UPDATE tbl_transaccion
-                SET tipo_transaccion_id = (
-                    SELECT id FROM tbl_tipo_transaccion WHERE nombre = 'TRANSFERENCIA'
+                SET id_tipo_transaccion = (
+                    SELECT id_tipo_transaccion FROM tbl_tipo_transaccion WHERE nombre_tipo_transaccion = 'TRANSFERENCIA'
                 )
-                WHERE tipo_transaccion_id IS NULL
+                WHERE id_tipo_transaccion IS NULL
                 """)
                 .executeUpdate();
         log.info("Migración de tipos de transacción completada");
@@ -97,17 +97,19 @@ public class TransaccionDataInitializer implements ApplicationRunner {
      * Solo actúa sobre filas que no apuntan a una FK válida.
      */
     private void migrarEstadosTransaccion() {
-        int migrated = entityManager.createNativeQuery("""
-                UPDATE tbl_transaccion
-                SET estado_id = CASE estado_id
-                    WHEN 4 THEN (SELECT id FROM tbl_estado_transaccion WHERE nombre = 'PENDIENTE')
-                    WHEN 5 THEN (SELECT id FROM tbl_estado_transaccion WHERE nombre = 'APROBADA')
-                    WHEN 6 THEN (SELECT id FROM tbl_estado_transaccion WHERE nombre = 'RECHAZADA')
-                    ELSE (SELECT id FROM tbl_estado_transaccion WHERE nombre = 'PENDIENTE')
-                END
-                WHERE estado_id NOT IN (SELECT id FROM tbl_estado_transaccion)
-                  OR estado_id IS NULL
-                """)
+        int migrated = entityManager
+                .createNativeQuery(
+                        """
+                                UPDATE tbl_transaccion
+                                SET id_estado_transaccion = CASE id_estado_transaccion
+                                    WHEN 4 THEN (SELECT id_estado_transaccion FROM tbl_estado_transaccion WHERE nombre_estado_transaccion = 'PENDIENTE')
+                                    WHEN 5 THEN (SELECT id_estado_transaccion FROM tbl_estado_transaccion WHERE nombre_estado_transaccion = 'APROBADA')
+                                    WHEN 6 THEN (SELECT id_estado_transaccion FROM tbl_estado_transaccion WHERE nombre_estado_transaccion = 'RECHAZADA')
+                                    ELSE (SELECT id_estado_transaccion FROM tbl_estado_transaccion WHERE nombre_estado_transaccion = 'PENDIENTE')
+                                END
+                                WHERE id_estado_transaccion NOT IN (SELECT id_estado_transaccion FROM tbl_estado_transaccion)
+                                  OR id_estado_transaccion IS NULL
+                                """)
                 .executeUpdate();
 
         if (migrated > 0) {

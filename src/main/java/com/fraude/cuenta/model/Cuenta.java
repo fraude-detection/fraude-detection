@@ -17,9 +17,9 @@ public class Cuenta {
     @Column(name = "numero_cuenta")
     private String numeroCuenta;
 
-    @Column(name = "saldo")
+    @Column(name = "saldo_cuenta")
     private BigDecimal saldo;
 
-    @Column(name = "num_documento")
+    @Column(name = "num_documento_cuenta")
     private String numDocumento;
 }

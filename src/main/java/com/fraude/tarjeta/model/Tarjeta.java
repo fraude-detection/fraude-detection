@@ -16,9 +16,10 @@ public class Tarjeta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_tarjeta")
     private Integer id;
 
-    @Column(name = "num_documento", nullable = false)
+    @Column(name = "num_documento_tarjeta", nullable = false)
     private String numDocumento;
 
     /** CREDITO o DEBITO */
@@ -26,19 +27,19 @@ public class Tarjeta {
     private String tipoTarjeta;
 
     /** Últimos 4 dígitos de la tarjeta */
-    @Column(name = "ultimos_cuatro")
+    @Column(name = "ultimos_cuatro_tarjeta")
     private String ultimosCuatro;
 
-    @Column(name = "nombre_titular", nullable = false)
+    @Column(name = "nombre_titular_tarjeta", nullable = false)
     private String nombreTitular;
 
     /** MM/YY */
-    @Column(name = "fecha_expiracion")
+    @Column(name = "fecha_expiracion_tarjeta")
     private String fechaExpiracion;
 
     /** FK normalizada a tbl_marca_tarjeta */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "marca_id")
+    @JoinColumn(name = "id_marca_tarjeta")
     private MarcaTarjeta marcaTarjeta;
 
     /** Compatibilidad hacia atrás: devuelve el nombre de la marca como string */
@@ -48,11 +49,11 @@ public class Tarjeta {
     }
 
     /** ID del customer en Stripe */
-    @Column(name = "stripe_customer_id")
+    @Column(name = "stripe_customer_id_tarjeta")
     private String stripeCustomerId;
 
     /** ID del PaymentMethod en Stripe */
-    @Column(name = "stripe_payment_method_id")
+    @Column(name = "stripe_payment_method_id_tarjeta")
     private String stripePaymentMethodId;
 
     /**
@@ -60,7 +61,7 @@ public class Tarjeta {
      * (ACTIVA, PENDIENTE, ELIMINADA, RECHAZADA, BLOQUEADA)
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estado_id")
+    @JoinColumn(name = "id_estado_tarjeta")
     private EstadoTarjeta estadoTarjeta;
 
     /** Compatibilidad hacia atrás: devuelve el ID del estado */
@@ -76,11 +77,11 @@ public class Tarjeta {
     }
 
     /** Límite de crédito asignado por el admin (solo tarjetas CREDITO) */
-    @Column(name = "limite_credito")
+    @Column(name = "limite_credito_tarjeta")
     private Double limiteCredito;
 
     /** Crédito disponible actual (se reduce al pagar con tarjeta de crédito) */
-    @Column(name = "credito_disponible")
+    @Column(name = "credito_disponible_tarjeta")
     private Double creditoDisponible;
 
     /** Saldo cargado en la tarjeta (solo tarjetas DEBITO) */
@@ -88,9 +89,9 @@ public class Tarjeta {
     private Double saldoTarjeta;
 
     /** Motivo del rechazo (opcional) */
-    @Column(name = "motivo_rechazo")
+    @Column(name = "motivo_rechazo_tarjeta")
     private String motivoRechazo;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion_tarjeta")
     private LocalDateTime fechaCreacion;
 }

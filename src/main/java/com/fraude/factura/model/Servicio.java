@@ -13,11 +13,12 @@ public class Servicio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_servicio")
     private Integer id;
 
-    @Column(name = "nombre", unique = true, nullable = false, length = 50)
+    @Column(name = "nombre_servicio", unique = true, nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "descripcion", length = 255)
+    @Column(name = "descripcion_servicio", length = 255)
     private String descripcion;
 }

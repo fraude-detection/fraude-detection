@@ -13,11 +13,12 @@ public class EstadoFactura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_estado_factura")
     private Integer id;
 
-    @Column(name = "nombre", unique = true, nullable = false, length = 50)
+    @Column(name = "nombre_estado_factura", unique = true, nullable = false, length = 50)
     private String nombre;
 
-    @Column(name = "descripcion", length = 255)
+    @Column(name = "descripcion_estado_factura", length = 255)
     private String descripcion;
 }

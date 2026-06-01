@@ -1,4 +1,5 @@
-const API = "http://localhost:8080/api/bolsillos";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
+const API = `${BASE_URL}/api/bolsillos`;
 
 export interface Bolsillo {
   id: number;

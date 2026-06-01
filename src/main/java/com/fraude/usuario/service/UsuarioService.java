@@ -48,8 +48,21 @@ public class UsuarioService {
                     .build();
         }
 
-        // Comparar password con BCrypt
-        if (!passwordEncoder.matches(loginRequest.getPassword(), usuario.getPasswordHash())) {
+        // Comparar password: si el hash no es BCrypt (usuario previo a la migración),
+        // verificar en texto plano y re-encriptar automáticamente
+        String storedHash = usuario.getPasswordHash();
+        boolean passwordOk;
+        if (storedHash != null && storedHash.startsWith("$2a$")) {
+            passwordOk = passwordEncoder.matches(loginRequest.getPassword(), storedHash);
+        } else {
+            // Contraseña en texto plano (pre-BCrypt) — migrar en caliente
+            passwordOk = loginRequest.getPassword().equals(storedHash);
+            if (passwordOk) {
+                usuario.setPasswordHash(passwordEncoder.encode(loginRequest.getPassword()));
+                repository.save(usuario);
+            }
+        }
+        if (!passwordOk) {
             return LoginResponse.builder()
                     .success(false)
                     .mensaje("Contraseña incorrecta")
@@ -102,9 +115,9 @@ public class UsuarioService {
                     .build();
         }
 
-        // Obtener el rol USER
+        // Obtener el rol USER (crear si no existe)
         Rol rolUser = rolRepository.findByNombre("USER")
-                .orElseThrow(() -> new RuntimeException("Rol USER no encontrado en la base de datos"));
+                .orElseGet(() -> rolRepository.save(Rol.builder().nombre("USER").build()));
 
         // Crear usuario
         UsuarioId id = new UsuarioId(request.getNumDocumento());

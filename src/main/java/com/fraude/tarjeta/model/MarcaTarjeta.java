@@ -13,12 +13,13 @@ public class MarcaTarjeta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_marca_tarjeta")
     private Integer id;
 
     /** VISA, MASTERCARD, AMEX, UNKNOWN */
-    @Column(name = "nombre", nullable = false, unique = true)
+    @Column(name = "nombre_marca_tarjeta", nullable = false, unique = true)
     private String nombre;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion_marca_tarjeta")
     private String descripcion;
 }

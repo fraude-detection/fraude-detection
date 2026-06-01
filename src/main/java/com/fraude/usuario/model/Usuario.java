@@ -17,28 +17,31 @@ public class Usuario {
     @EmbeddedId
     private UsuarioId id;
 
-    @Column(name = "rol_id")
+    @Column(name = "id_rol")
     private Integer rolId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rol_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol", insertable = false, updatable = false)
     private Rol rol;
 
+    @Column(name = "nombre_usuario")
     private String nombre;
 
+    @Column(name = "apellido_usuario")
     private String apellido;
 
+    @Column(name = "email_usuario")
     private String email;
 
-    @Column(name = "password_hash")
+    @Column(name = "password_hash_usuario")
     private String passwordHash;
 
-    @Column(name = "estado_id")
+    @Column(name = "estado_usuario")
     private Integer estadoId;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion_usuario")
     private LocalDateTime fechaCreacion;
 
-    @Column(name = "fecha_actualizacion")
+    @Column(name = "fecha_actualizacion_usuario")
     private LocalDateTime fechaActualizacion;
 }

@@ -84,10 +84,10 @@ public class FacturaDataInitializer implements ApplicationRunner {
         if (columnExists("tbl_factura", "tipo_servicio")) {
             int migratedServicio = entityManager.createNativeQuery("""
                     UPDATE tbl_factura
-                    SET servicio_id = (
-                        SELECT id FROM tbl_servicio WHERE nombre = tbl_factura.tipo_servicio
+                    SET id_servicio = (
+                        SELECT id_servicio FROM tbl_servicio WHERE nombre_servicio = tbl_factura.tipo_servicio
                     )
-                    WHERE servicio_id IS NULL
+                    WHERE id_servicio IS NULL
                       AND tipo_servicio IS NOT NULL
                     """).executeUpdate();
             if (migratedServicio > 0) {
@@ -96,14 +96,17 @@ public class FacturaDataInitializer implements ApplicationRunner {
         }
 
         if (columnExists("tbl_factura", "estado")) {
-            int migratedEstado = entityManager.createNativeQuery("""
-                    UPDATE tbl_factura
-                    SET estado_factura_id = (
-                        SELECT id FROM tbl_estado_factura WHERE nombre = tbl_factura.estado
-                    )
-                    WHERE estado_factura_id IS NULL
-                      AND estado IS NOT NULL
-                    """).executeUpdate();
+            int migratedEstado = entityManager
+                    .createNativeQuery(
+                            """
+                                    UPDATE tbl_factura
+                                    SET id_estado_factura = (
+                                        SELECT id_estado_factura FROM tbl_estado_factura WHERE nombre_estado_factura = tbl_factura.estado
+                                    )
+                                    WHERE id_estado_factura IS NULL
+                                      AND estado IS NOT NULL
+                                    """)
+                    .executeUpdate();
             if (migratedEstado > 0) {
                 log.info("Migración legacy: {} facturas con estado asignado", migratedEstado);
             }

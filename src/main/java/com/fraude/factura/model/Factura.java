@@ -16,44 +16,45 @@ public class Factura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_factura")
     private Integer id;
 
-    @Column(name = "num_documento", nullable = false)
+    @Column(name = "num_documento_factura", nullable = false)
     private String numDocumento;
 
     /** FK normalizada a tbl_servicio */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "servicio_id")
+    @JoinColumn(name = "id_servicio")
     private Servicio servicio;
 
-    @Column(name = "descripcion")
+    @Column(name = "descripcion_factura")
     private String descripcion;
 
-    @Column(name = "referencia", nullable = false)
+    @Column(name = "referencia_factura", nullable = false)
     private String referencia;
 
-    @Column(name = "monto", nullable = false)
+    @Column(name = "monto_factura", nullable = false)
     private Double monto;
 
     /** FK normalizada a tbl_estado_factura */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "estado_factura_id")
+    @JoinColumn(name = "id_estado_factura")
     private EstadoFactura estadoFactura;
 
-    @Column(name = "fecha_vencimiento")
+    @Column(name = "fecha_vencimiento_factura")
     private LocalDateTime fechaVencimiento;
 
-    @Column(name = "fecha_pago")
+    @Column(name = "fecha_pago_factura")
     private LocalDateTime fechaPago;
 
-    @Column(name = "tarjeta_id")
+    @Column(name = "id_tarjeta")
     private Integer tarjetaId;
 
     /** ID del PaymentIntent en Stripe */
-    @Column(name = "stripe_payment_intent_id")
+    @Column(name = "stripe_payment_intent_id_factura")
     private String stripePaymentIntentId;
 
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion_factura")
     private LocalDateTime fechaCreacion;
 
     /** Compatibilidad hacia atrás: devuelve el nombre del servicio como string */
