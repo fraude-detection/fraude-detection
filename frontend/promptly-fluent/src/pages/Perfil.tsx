@@ -43,7 +43,7 @@ const PerfilPage = () => {
       if (passwordNuevo) body.passwordNuevo = passwordNuevo;
 
       const res = await fetch(
-        `http://localhost:8080/api/usuarios/${user.numDocumento}`,
+        `${import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com"}/api/usuarios/${user.numDocumento}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

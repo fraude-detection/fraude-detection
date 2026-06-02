@@ -31,7 +31,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com";
 
 interface Tarjeta {
   id: number;

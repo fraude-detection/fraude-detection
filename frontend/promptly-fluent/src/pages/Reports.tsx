@@ -28,7 +28,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 
-const BASE = "http://localhost:8080";
+const BASE = import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com";
 
 interface Resumen {
   totalTransacciones: number;

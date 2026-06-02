@@ -40,7 +40,7 @@ const Register = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:8080/api/usuarios/register",
+        `${import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com"}/api/usuarios/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

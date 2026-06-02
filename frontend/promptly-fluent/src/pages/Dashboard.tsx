@@ -56,7 +56,7 @@ const Dashboard = () => {
 
         // Fetch transacciones
         const transResponse = await fetch(
-          `http://localhost:8080/api/transacciones/cuenta/${user.numeroCuenta}`,
+          `${import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com"}/api/transacciones/cuenta/${user.numeroCuenta}`,
         );
 
         console.log("📡 Respuesta transacciones:", transResponse.status);

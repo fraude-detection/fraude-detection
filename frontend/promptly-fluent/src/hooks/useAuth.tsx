@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       console.log("📡 Intentando login con:", { numDocumento, password });
 
-      const response = await fetch("http://localhost:8080/api/usuarios/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com"}/api/usuarios/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

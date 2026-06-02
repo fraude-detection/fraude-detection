@@ -32,7 +32,7 @@ import {
   Building2,
 } from "lucide-react";
 
-const API = "http://localhost:8080";
+const API = import.meta.env.VITE_API_BASE_URL ?? "https://fraude-detection-backend.onrender.com";
 
 interface Factura {
   id: number;
