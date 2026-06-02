@@ -19,7 +19,8 @@ public class CorsConfig {
                                 "http://127.0.0.1:5173",
                                 "http://localhost:5174",
                                 "http://127.0.0.1:5174",
-                                "http://localhost:8081")
+                                "http://localhost:8081",
+                                "https://fraude-detection-frontend.onrender.com")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
